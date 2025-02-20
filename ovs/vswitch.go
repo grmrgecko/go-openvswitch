@@ -286,6 +286,11 @@ type InterfaceOptions struct {
 	// Common name of the remote certificate signed by an certificate authority to
 	// encrypt using IPsec. Supports GRE, GENEVE, VXLAN, and STT tunnel.
 	RemoteName string
+
+	// Optionally compute encapsulation header (either GRE or UDP) checksums on
+	// outgoing packets. Default is false, set to true to enable. Checksums present
+	// on incoming packets will be validated regardless of this setting.
+	Csum string
 }
 
 // slice creates a string slice containing any non-zero option values from the
@@ -337,6 +342,10 @@ func (i InterfaceOptions) slice() []string {
 
 	if i.RemoteName != "" {
 		s = append(s, fmt.Sprintf("options:remote_name=%s", i.RemoteName))
+	}
+
+	if i.Csum != "" {
+		s = append(s, fmt.Sprintf("options:csum=%s", i.Csum))
 	}
 
 	return s
